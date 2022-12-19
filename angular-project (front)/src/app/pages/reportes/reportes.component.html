@@ -1,0 +1,34 @@
+<nav class="navbar " style="background-color: white;">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-navbar-collapse" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <!-- <a class="navbar-brand" href="javascript:;">
+        <i class="fa fa-chart-bar"></i> Reportes
+      </a> -->
+    </div>
+
+    <div class="collapse navbar-collapse" id="bs-navbar-collapse">
+      <ul class="nav navbar-nav">
+
+        <li class="dropdown">
+          <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" role="button">Menú de reportes <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a [routerLink]="[ 'servicios' ]">Listados de servicios</a></li>
+            <li><a [routerLink]="[ 'conductores' ]">Estadísticas de conductores</a></li>
+            <li><a [routerLink]="[ 'clientes' ]">Estadísticas de clientes</a></li>
+            <li><a [routerLink]="[ 'personalizado' ]">Conductores y rutas</a></li>
+          </ul>
+        </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+<router-outlet></router-outlet>

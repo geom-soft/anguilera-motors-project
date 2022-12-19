@@ -1,0 +1,34 @@
+.img-logo {
+  padding: 5px;
+  border-radius: 5px;
+  background-color: white;
+  height: 100px;
+}
+
+.img-main {
+  padding: 15px;
+  max-height: 400px;
+}
+
+.brand-logo {
+  max-width: 120px;
+}
+
+.brands-container {
+  vertical-align: middle;
+}
+
+.img-wrap i {
+  margin-top: 15px;
+  margin-left: 15px;
+  color: #B72536;
+}
+
+.img-footer {
+  height: 250px;
+}
+
+
+.cursor-pointer {
+  cursor: pointer;
+}

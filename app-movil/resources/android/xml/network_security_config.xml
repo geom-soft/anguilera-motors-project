@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <base-config cleartextTrafficPermitted="true">
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">localhost</domain>
+        <domain includeSubdomains="true">192.168.100.5</domain>
+        <domain includeSubdomains="true">http://aguileramotors.com</domain>
+        <domain includeSubdomains="true">http://api.aguileramotors.com</domain>
+        <domain includeSubdomains="true">https://aguileramotors.com</domain>
+        <domain includeSubdomains="true">https://api.aguileramotors.com</domain>
+        <domain includeSubdomains="true">https://www.google.com</domain>
+        <domain includeSubdomains="true">https://google.com</domain>
+    </domain-config>
+</network-security-config>
+

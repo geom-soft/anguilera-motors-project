@@ -1,0 +1,148 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Datos del servicio</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+
+
+  <form #form="ngForm" novalidate>
+    <ion-list lines="none">
+
+      <ion-item-divider><ion-label>Información del servicio</ion-label></ion-item-divider>
+      <ion-item>
+        <ion-icon name="alarm" color="secondary" size="large" slot="start" *ngIf="objViaje?.estatus === 'PROGRAMADO'"></ion-icon>
+        <ion-icon name="checkmark-circle" color="success" size="large" slot="start" *ngIf="objViaje?.estatus === 'ACEPTADO'"></ion-icon>
+        <ion-icon name="car" color="warning" size="large" slot="start" *ngIf="objViaje?.estatus === 'INICIADO'"></ion-icon>
+        <ion-icon name="checkmark-circle" color="secondary" size="large" slot="start" *ngIf="objViaje?.estatus === 'TERMINADO'"></ion-icon>
+        <ion-label>
+          <h2>{{objViaje?.nombre_ruta | uppercase}} - {{objViaje?.nombre_empresa | titlecase}}</h2>
+          <h3 *ngIf="objViaje?.estatus === 'PROGRAMADO'">Pendiente por confirmar</h3>
+          <h3 *ngIf="objViaje?.estatus === 'ACEPTADO'">Servicio confirmado</h3>
+          <h3 *ngIf="objViaje?.estatus === 'INICIADO'">Servicio en proceso...</h3>
+          <h3 *ngIf="objViaje?.estatus === 'TERMINADO'">Servicio finalizado</h3>
+          <p>{{objViaje?.fecha_servicio | moment:'hh:mm a - DD/MM/YYYY'}}</p>
+        </ion-label>
+      </ion-item>
+
+
+      <!-- ENTRADAS -->
+      <ng-container *ngIf="(objViaje?.estatus_entrada !== 'TERMINADO' && objViaje?.estatus_entrada !== null) || objViaje?.estatus === 'TERMINADO'">
+        <ion-item-divider *ngIf="objViaje?.estatus === 'TERMINADO'"><ion-label>Atendió</ion-label></ion-item-divider>
+        <ion-item-divider *ngIf="objViaje?.estatus !== 'TERMINADO'"><ion-label>Atendiendo</ion-label></ion-item-divider>
+        <ion-item>
+          <ion-label>
+            <h2>Servicio de Entrada</h2>
+          </ion-label>
+        </ion-item>
+    
+        <ion-item-divider><ion-label>Ruta y pasajero(s)</ion-label></ion-item-divider>
+  
+        <ion-item-sliding *ngFor="let item of objRutaEntrada;">
+  
+          <ion-item-options side="start" *ngIf="!item.abordo_entrada && objViaje.estatus === 'INICIADO'">
+            <ion-item-option color="danger" (click)="abordarEntrada(item.idreg, 0)">No abordó</ion-item-option>
+          </ion-item-options>
+  
+  
+          <ion-item button (click)="irMapa(item.longitud, item.latitud)" detail>
+            <ion-icon name="call" size="large" slot="start" *ngIf="item.telefono_solicitante"></ion-icon>
+            <ion-icon name="navigate-circle" color="medium" size="large" slot="start" *ngIf="!item.telefono_solicitante"></ion-icon>
+            <ion-label>
+              <h2>{{item.alias_lugar | uppercase}}</h2>
+              <h3>{{item.domicilio}}</h3>
+              <p *ngIf="item.nombre_solicitante">{{item.nombre_solicitante | titlecase}} <span *ngIf="item.numero_nomina"> - {{item.numero_nomina}}</span></p>
+              <p *ngIf="item.telefono_solicitante">Tel: {{item.telefono_solicitante}}</p>
+              <p *ngIf="item.hora_recoleccion_entrada">Hora de recolección {{item.hora_recoleccion_entrada}}</p>
+            </ion-label>
+            <ion-icon name="checkmark-circle" color="success" size="small" slot="end" *ngIf="item.abordo_entrada === '1'"></ion-icon>
+            <ion-icon name="close-circle" color="danger" size="small" slot="end" *ngIf="item.abordo_entrada === '0'"></ion-icon>
+          </ion-item>
+  
+          <ion-item-options side="end" *ngIf="!item.abordo_entrada && objViaje.estatus === 'INICIADO'">
+            <ion-item-option color="success" (click)="abordarEntrada(item.idreg, 1)">Abordó</ion-item-option>
+          </ion-item-options>
+  
+  
+        </ion-item-sliding>
+  
+        <div align="center" class="ion-padding" *ngIf="objRutaEntrada.length === 0">
+          <img src="assets/images/time.svg" height="100">
+          <h4>La ruta aún no ha sido definida por el administrador.</h4>
+        </div>
+      </ng-container>
+
+
+
+
+
+      <!-- SALIDAS -->
+      <ng-container *ngIf="((objViaje?.estatus_entrada === 'TERMINADO' || objViaje?.estatus_entrada === null) && objViaje?.estatus_salida !== 'TERMINADO' && objViaje?.estatus_salida !== null) || objViaje?.estatus === 'TERMINADO'">
+        <ion-item-divider *ngIf="objViaje?.estatus === 'TERMINADO'"><ion-label>Atendió</ion-label></ion-item-divider>
+        <ion-item-divider *ngIf="objViaje?.estatus !== 'TERMINADO'"><ion-label>Atendiendo</ion-label></ion-item-divider>
+        <ion-item>
+          <ion-label>
+            <h2>Servicio de Salida</h2>
+          </ion-label>
+        </ion-item>
+    
+        <ion-item-divider><ion-label>Ruta y pasajero(s)</ion-label></ion-item-divider>
+  
+        <ion-item-sliding *ngFor="let item of objRutaSalida;">
+  
+          <ion-item-options side="start" *ngIf="!item.abordo_salida && objViaje.estatus === 'INICIADO'">
+            <ion-item-option color="danger" (click)="abordarSalida(item.idreg, 0)">No abordó</ion-item-option>
+          </ion-item-options>
+  
+  
+          <ion-item button (click)="irMapa(item.longitud, item.latitud)" detail>
+            <ion-icon name="call" size="large" slot="start" *ngIf="item.telefono_solicitante"></ion-icon>
+            <ion-icon name="navigate-circle" color="medium" size="large" slot="start" *ngIf="!item.telefono_solicitante"></ion-icon>
+            <ion-label>
+              <h2>{{item.alias_lugar | uppercase}}</h2>
+              <h3>{{item.domicilio}}</h3>
+              <p *ngIf="item.nombre_solicitante">{{item.nombre_solicitante | titlecase}} <span *ngIf="item.numero_nomina"> - {{item.numero_nomina}}</span></p>
+              <p *ngIf="item.telefono_solicitante">Tel: {{item.telefono_solicitante}}</p>
+              <p *ngIf="item.hora_recoleccion_salida">Hora de recolección {{item.hora_recoleccion_salida}}</p>
+            </ion-label>
+            <ion-icon name="checkmark-circle" color="success" size="small" slot="end" *ngIf="item.abordo_salida === '1'"></ion-icon>
+            <ion-icon name="close-circle" color="danger" size="small" slot="end" *ngIf="item.abordo_salida === '0'"></ion-icon>
+          </ion-item>
+  
+          <ion-item-options side="end" *ngIf="!item.abordo_salida && objViaje.estatus === 'INICIADO'">
+            <ion-item-option color="success" (click)="abordarSalida(item.idreg, 1)">Abordó</ion-item-option>
+          </ion-item-options>
+  
+  
+        </ion-item-sliding>
+  
+        <div align="center" class="ion-padding" *ngIf="objRutaSalida.length === 0">
+          <img src="assets/images/time.svg" height="100">
+          <h4>La ruta aún no ha sido definida por el administrador.</h4>
+        </div>
+      </ng-container>
+
+
+      
+    
+    </ion-list>
+
+    <div class="ion-padding-horizontal">
+      <ion-button expand="block" color="success" *ngIf="objViaje?.estatus === 'ASIGNADO'" (click)="aceptar(id)"><ion-icon slot="start" name="checkmark-circle"></ion-icon> Confirmar servicio</ion-button>
+      <ion-button expand="block" color="primary" *ngIf="objViaje?.estatus === 'ACEPTADO'" (click)="iniciar()"><ion-icon slot="start" name="play"></ion-icon> Iniciar servicio</ion-button>
+      <ion-button expand="block" color="secondary" *ngIf="objViaje?.estatus === 'ASIGNADO' || objViaje?.estatus === 'ACEPTADO'" (click)="rechazar(id)"><ion-icon slot="start" name="close-circle"></ion-icon> Declinar servicio</ion-button>
+      <ion-button expand="block" color="warning" *ngIf="objViaje?.estatus === 'INICIADO' && objViaje?.estatus_entrada === 'EN PROCESO' && objViaje?.estatus_salida === 'PENDIENTE'"(click)="terminarIntermedio()" [disabled]="!concluyoEntradas"><ion-icon slot="start" name="square"></ion-icon> Concluir entradas</ion-button>
+      <ion-button expand="block" color="warning" *ngIf="objViaje?.estatus === 'INICIADO' && (objViaje?.estatus_entrada === 'TERMINADO' || (objViaje?.estatus_entrada === null && objViaje?.estatus_salida === 'EN PROCESO') || (objViaje?.estatus_salida === null && objViaje?.estatus_entrada === 'EN PROCESO'))" (click)="terminar()" [disabled]="!concluyoEntradas || (concluyoEntradas && !concluyoSalidas)"><ion-icon slot="start" name="square"></ion-icon> Finalizar servicio</ion-button>
+    </div>
+    <br>
+
+  </form>
+
+
+
+</ion-content>

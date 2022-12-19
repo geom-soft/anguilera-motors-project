@@ -1,0 +1,63 @@
+<section class="content-header">
+  <h1>
+      Ajustes
+  </h1>
+  <ol class="breadcrumb">
+      <li><a [routerLink]="[ '/inicio' ]"><i class="fas fa-home"></i> Inicio</a></li>
+      <li class="active">Ajustes</li>
+  </ol>
+</section>
+
+<!-- Main content -->
+<section class="content">
+
+    <p>
+        En éste módulo podrá realizar los ajustes especiales del sistema de notificaciones.
+    </p>
+
+    <div class="row">
+      <div class="col-xs-4">
+        <button class="btn btn-app" [routerLink]="['/inicio']">
+            <i class="fa fa-home"></i> Inicio
+        </button>
+      </div>
+    </div>
+
+    <!-- Default box -->
+    <div class="box" *ngIf="objSettings">
+        <div class="box-header with-border">
+            <h3 class="box-title">Tiempos de notificación</h3>
+        </div>
+        <form class="form">
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-md-4 form-group">
+                        <label>Notificaciones de servicios pendientes (minutos) *</label>
+                        <input type="number" class="form-control" step="1" name="pendientes" [(ngModel)]="objSettings.pendientes" disabled>
+                    </div>
+                    <div class="col-md-4 form-group">
+                        <label>Notificaciones de servicios aceptados (minutos) *</label>
+                        <input type="number" class="form-control" step="1" name="aceptados" [(ngModel)]="objSettings.aceptados" disabled>
+                    </div>
+                    <div class="col-md-4 form-group">
+                        <label>Notificaciones de servicios reasignados (minutos) *</label>
+                        <input type="number" class="form-control" step="1" name="reasignados" [(ngModel)]="objSettings.reasignados" disabled>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 form-group">
+                        <label>Notificaciones de servicios cancelados (minutos) *</label>
+                        <input type="number" class="form-control" step="1" name="cancelados" [(ngModel)]="objSettings.cancelados" disabled>
+                    </div>
+                    <div class="col-md-4 form-group">
+                        <label>Notificaciones de documentación vigente (meses) *</label>
+                        <input type="number" class="form-control" step="1" name="vigencias" [(ngModel)]="objSettings.vigencias" disabled>
+                    </div>
+                </div>
+            </div>
+            <!-- /.box-body -->
+        </form>
+    </div>
+    <!-- /.box -->
+
+</section>

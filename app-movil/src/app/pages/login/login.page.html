@@ -1,0 +1,35 @@
+<ion-content id="container" [fullscreen]="true" padding>
+
+  <div class="image-login">
+    <img src="assets/images/aguilera_motors.png">
+  </div>
+  <br>
+
+  <form #form="ngForm" (submit)="doLogin()">
+
+    <ion-list inset>
+      <ion-item lines="inset">
+        <ion-label position="floating">Correo electrónico</ion-label>
+        <ion-input type="email" name="user" [(ngModel)]="objLogin.user" required></ion-input>
+      </ion-item>
+  
+      <ion-item lines="inset">
+        <ion-label position="floating">Contraseña</ion-label>
+        <ion-input type="password" name="nip" [(ngModel)]="objLogin.nip" required></ion-input>
+      </ion-item>
+    </ion-list>
+
+
+    <br>
+    <ion-row>
+      <ion-col>
+        <ion-button type="submit" color="primary" expand="block" [disabled]="!form.valid">Entrar</ion-button>
+        <br>
+        <a href="javascript:;" class="small-text">¿Olvidaste tu contraseña?</a>
+      </ion-col>
+    </ion-row>
+  </form>
+
+  <p class="footer">Aguilera Motors {{anio}}. Todos los derechos reservados.</p>
+
+</ion-content>

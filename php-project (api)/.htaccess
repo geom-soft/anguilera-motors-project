@@ -1,0 +1,11 @@
+php_value date.timezone "America/Mexico_City"
+
+RewriteEngine on
+RewriteCond $1 !^(index.php|css|js|scripts|dist|images|robots.txt)
+
+RewriteRule ^(scripts(/index)?|index(\.php)?)/?$ / [L,R=301]
+RewriteRule ^(.*)/index/?$ $1 [L,R=301]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ /api_xabu/index.php/$1 [L]

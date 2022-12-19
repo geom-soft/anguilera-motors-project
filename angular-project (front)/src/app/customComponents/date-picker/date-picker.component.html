@@ -1,0 +1,26 @@
+<div class="input-group">
+      <div [hidden]="isDisabled">
+          <input type="text" class="form-control daterangepicker" placeholder="Seleccionar rango de fechas para consultar" #drp="bsDaterangepicker" bsDaterangepicker [bsConfig]="bsConfig" [(ngModel)]="rangoFechas" [minDate]="rangoValido.min" [maxDate]="rangoValido.max"
+              (bsValueChange)="valueChange($event)" [isDisabled]="isDisabled">
+      </div>
+      <div class="input-group-btn">
+          <button type="button" class="btn btn-default btn-flat dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+          {{textoBoton}} <span class="fa fa-caret-down"></span>
+        </button>
+          <ul class="dropdown-menu" [ngClass]="{'dropdown-menu-right': posRight}">
+              <li><a href="javascript:;" (click)="hoy()">Hoy</a></li>
+              <li><a href="javascript:;" (click)="ayer()">Ayer</a></li>
+              <li><a href="javascript:;" (click)="ultimos7dias()">Últimos 7 días</a></li>
+              <li><a href="javascript:;" (click)="ultimos30dias()">Últimos 30 días</a></li>
+              <li><a href="javascript:;" (click)="esteMes()">Este mes</a></li>
+              <li><a href="javascript:;" (click)="mesPasado()">Mes pasado</a></li>
+              <li><a href="javascript:;" (click)="hace3meses()">Hace 3 meses</a></li>
+              <li><a href="javascript:;" (click)="hace6meses()">Hace 6 meses</a></li>
+              <li><a href="javascript:;" (click)="esteanio()">Este año</a></li>
+              <li><a href="javascript:;" (click)="hace1anio()">Hace un año</a></li>
+              <li><a href="javascript:;" (click)="aniopasado()">Año pasado</a></li>
+              <li class="divider"></li>
+              <li><a href="javascript:;" (click)="manualmente()">Seleccionar periodo manualmente</a></li>
+          </ul>
+      </div>
+  </div>

@@ -1,0 +1,175 @@
+<section class="content-header">
+  <h1>
+      Clientes
+      <small>listado.</small>
+  </h1>
+  <ol class="breadcrumb">
+      <li><a [routerLink]="[ '/inicio' ]"><i class="fas fa-home"></i> Inicio</a></li>
+      <li class="active">Clientes</li>
+  </ol>
+</section>
+
+<section class="content animated fadeIn" *ngIf="showError">
+  <div class="callout callout-warning">
+      <h4>Advertencia</h4>
+      <p>Hubo un problema al cargar el listado.</p>
+  </div>
+</section>
+
+<!-- Main content -->
+<section class="content" *ngIf="!showError">
+
+  <p>
+      En éste módulo se puede visualizar el listado de los clientes registrados en la plataforma.
+  </p>
+
+  <div class="row">
+      <div class="col-xs-4">
+          <button class="btn btn-app" [routerLink]="['/inicio']">
+              <i class="fa fa-home"></i> Inicio
+          </button>
+      </div>
+      <div class="col-xs-8">
+          <button class="btn btn-app pull-right" (click)="nuevoCliente()">
+              <i class="fa fa-plus"></i> Nuevo cliente
+          </button>
+      </div>
+  </div>
+
+  <!-- Default box -->
+  <div class="box">
+      <div class="box-header with-border">
+          <h3 class="box-title">Listado de Clientes</h3>
+      </div>
+      <div class="box-body">
+
+        <div class="row">
+            <div class="col-md-4 pull-right mb-4">
+                <input type="text"
+                        class="form-control"
+                        placeholder="Buscar..."
+                        (keyup)="buscarFilas($event)"/>
+            </div>
+        </div>
+        
+        <ngx-datatable #dtable
+                        class="material striped expandable" 
+                        [rows]="objClientes"
+                        columnMode="force"
+                        [headerHeight]="50"
+                        [footerHeight]="50"
+                        rowHeight="auto"
+                        [loadingIndicator]="loading"
+                        [messages]="msgTraduccion"
+                        [limit]="10">
+            <!-- <ngx-datatable-column name="#" [width]="10" [draggable]="false" [sortable]="true" headerClass="text-center-important" cellClass="text-center-important">
+                <ng-template let-rowIndex="rowIndex" let-row="row" ngx-datatable-cell-template>
+                    {{ getRowIndex(row) + 1 | number }}
+                </ng-template>
+            </ngx-datatable-column> -->
+            <ngx-datatable-column name="Empresa" [draggable]="false" [sortable]="true" headerClass="text-center-important">
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                    <a [routerLink]="['/empleados', row.codigo_cliente]">{{row.nombre_empresa | uppercase}}</a>
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Titular" prop="nombre_titular" [draggable]="false" [sortable]="true" headerClass="text-center-important">
+                <ng-template let-value="value" ngx-datatable-cell-template>
+                    {{ value | titlecase }}
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Teléfono" prop="telefono" [draggable]="false" [sortable]="false" headerClass="text-center-important" cellClass="text-center-important">
+                <ng-template let-value="value" ngx-datatable-cell-template>
+                    {{ value }}
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Opciones" [width]="80" prop="codigo_cliente" [draggable]="false" [sortable]="false" headerClass="text-center-important" cellClass="text-center-important">
+                <ng-template let-value="value" ngx-datatable-cell-template>
+                    <button class="btn bg-teal btn-sm" (click)="editarCliente(value)" title="Editar información">
+                        <i class="fa fa-edit"></i>
+                    </button>
+                    <button class="btn bg-orange btn-sm ml-2" (click)="eliminarCliente(value)" title="Eliminar registro">
+                        <i class="fa fa-trash-alt"></i>
+                    </button>
+                </ng-template>
+            </ngx-datatable-column>
+        </ngx-datatable>
+
+          
+      </div>
+      <!-- /.box-body -->
+  </div>
+  <!-- /.box -->
+
+</section>
+
+
+
+<div class="modal fade" id="modal-cliente">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" *ngIf="nuevoRegistro">Nuevo Cliente</h4>
+        <h4 class="modal-title" *ngIf="!nuevoRegistro">Editar Cliente</h4>
+      </div>
+
+      <form class="form" #form="ngForm" (submit)="submitForm(form)">
+
+        <div class="modal-body" *ngIf="objCliente">
+            <div class="row">
+              <div class="col-md-6 form-group">
+                  <label>Empresa *</label>
+                  <input type="text" class="form-control" placeholder="Nombre de a empresa" name="nombre_empresa" [(ngModel)]="objCliente.nombre_empresa" required>
+              </div>
+              <div class="col-md-6 form-group">
+                  <label>Titular</label>
+                  <input type="text" class="form-control" placeholder="Nombre del titular" name="nombre_titular" [(ngModel)]="objCliente.nombre_titular">
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6 form-group">
+                  <label>Teléfono</label>
+                  <input type="text" class="form-control" placeholder="Número de contacto" name="telefono" [(ngModel)]="objCliente.telefono">
+              </div>
+              <div class="col-md-6 form-group">
+                <label>Domicilio</label>
+                <input type="text" class="form-control" placeholder="Domicilio de la empresa" name="domicilio" [(ngModel)]="objCliente.domicilio">
+              </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 form-group">
+                    <label>Usuario de acceso *</label>
+                    <input type="text" class="form-control" placeholder="Nombre de usuario de acceso" name="usuario_acceso" [(ngModel)]="objCliente.usuario_acceso" required>
+                </div>
+            </div>
+            
+            <!-- <div class="row" [hidden]="!nuevoRegistro">
+                <div class="col-md-6">
+                    <label>NIP *</label>
+                    <input type="password" class="form-control" placeholder="NIP de acceso" #pass1 name="contrasena" [(ngModel)]="objUsuario.contrasena" required [minlength]="nuevoRegistro ? 3 : ''" [maxlength]=" nuevoRegistro ? 6 : ''" [pattern]=" nuevoRegistro ? '[0-9]*' : ''"
+                        inputmode="numeric">
+                    <span class="help-block">El NIP de acceso debe tener entre 3 y 6 dígitos numéricos.</span>
+                </div>
+                <div class="col-md-6">
+                    <label>Confirmar NIP *</label>
+                    <input type="password" class="form-control" id="pass2" placeholder="Confirmar NIP" #pass2 inputmode="numeric">
+                    <span class="help-block" *ngIf="pass1.value !== pass2.value">Ambos NIPs deben coincidir.</span>
+                </div>
+            </div> -->
+
+            <input type="hidden" name="contrasena" [ngModel]="objCliente.contrasena">
+            <input type="hidden" name="codigo_cliente" [ngModel]="objCliente.codigo_cliente">
+
+          
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-warning pull-left" *ngIf="!nuevoRegistro" (click)="resetPass()">Restaurar NIP</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn bg-navy"><i class="fa fa-save"></i> Guardar cambios</button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>

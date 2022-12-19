@@ -1,0 +1,45 @@
+<div class="modal fade" id="modal-logs">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Registros del Servicio</h4>
+      </div>
+      <div class="modal-body table-responsive">
+        <div class="row" *ngIf="objLogs.showNota">
+          <div class="col-md-6">
+            <div class="input-group margin">
+              <input type="text" class="form-control" placeholder="Agregar notas al servicio" id="inputNota" (keyup.enter)="agregarNota()">
+              <span class="input-group-btn">
+                <button type="button" class="btn bg-navy" (click)="agregarNota()">Agregar</button>
+              </span>
+            </div>
+          </div>
+        </div>
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th class="text-center">Fecha</th>
+              <th class="text-center">Estatus</th>
+              <th class="text-center">Nombre</th>
+              <th class="text-center">Notas</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let log of objLogs.arr;">
+              <td class="text-center">{{log.fecha_registro | moment:'DD/MM/YYYY hh:mm a'}}</td>
+              <td class="text-center" [innerHTML]="log.estatus | estatusServicio"></td>
+              <td class="text-center">{{log.nombre | uppercase}}</td>
+              <td>{{log.notas | uppercase}}</td>
+            </tr>
+            <tr *ngIf="objLogs.length === 0"><td class="text-center" colspan="4">No hay registros para éste servicio</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+

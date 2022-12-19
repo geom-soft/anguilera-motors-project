@@ -1,0 +1,47 @@
+<div class="login-box">
+  <div align="center" class="login-logo">
+      <img src="assets/images/aguilera_motors.png" height="200">
+  </div>
+  <!-- /.login-logo -->
+  <div class="login-box-body">
+      <p class="login-box-msg">Inicia sesión para continuar</p>
+
+      <div class="alert alert-warning alert-dismissible" *ngIf="error">
+          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button> Verifica tus datos de acceso.
+      </div>
+
+      <div class="alert alert-warning" *ngIf="objUsuarios && objUsuarios.length === 0">
+          <p>Hubo un problema al cargar los usuarios del sistema.</p>
+      </div>
+
+      <form class="form" #form="ngForm" (submit)="doLogin()">
+          <!-- <div class="form-group has-feedback">
+              <select class="form-control" name="codigo_usuario" [(ngModel)]="objLogin.codigo_usuario" required>
+                <option selected value="">Seleccionar...</option>
+                <option *ngFor="let user of objUsuarios" [disabled]="user.estatus === '2'" [value]="user.codigo_usuario">{{user.nombres + ' ' + user.apellidos | uppercase}}</option>
+              </select>
+              <span class="glyphicon glyphicon-user form-control-feedback"></span>
+          </div> -->
+          <div class="form-group has-feedback">
+            <input type="text" class="form-control" placeholder="Nombre de usuario de acceso" name="acceso" [(ngModel)]="objLogin.acceso" required>
+            <span class="glyphicon glyphicon-user form-control-feedback"></span>
+            </div>
+          <div class="form-group has-feedback">
+              <input type="password" class="form-control" placeholder="NIP" name="nip" [(ngModel)]="objLogin.nip" required>
+              <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+          </div>
+          <div class="row">
+              <div class="col-xs-12">
+                  <button type="submit" class="btn bg-navy btn-block btn-flat" [disabled]="!form.valid">Iniciar Sesión</button>
+              </div>
+          </div>
+      </form>
+
+      <br>
+      <p class="text-center">{{global.nombreSistema}}. Todos los derechos reservados {{anio}}. </p>
+
+  </div>
+  <!-- /.login-box-body -->
+
+</div>
+<!-- /.login-box -->

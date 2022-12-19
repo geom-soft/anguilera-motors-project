@@ -1,0 +1,206 @@
+<!-- <section class="content-header">
+  <h1>
+    Mis Servicios
+  </h1>
+  <ol class="breadcrumb">
+    <li class="active">Mis servicios</li>
+  </ol>
+</section> -->
+
+<section class="content animated fadeIn" *ngIf="showError">
+  <div class="callout callout-warning">
+      <h4>Advertencia</h4>
+      <p>Hubo un problema al cargar el listado.</p>
+  </div>
+</section>
+
+<section class="content" *ngIf="!showError">
+
+
+  <div class="row">
+    <div class="col-xs-4">
+        
+    </div>
+    <div class="col-xs-8">
+        <button type="button" class="btn btn-app pull-right" (click)="nuevoServicio()">
+            <i class="fa fa-plus"></i> Nuevo servicio
+        </button>
+        <!-- <a class="btn btn-app pull-right" data-toggle="modal" href="#modal-terminados">
+          <i class="fa fa-list"></i> Serv. Terminados
+        </a>
+        <a class="btn btn-app bg-green pull-right" data-toggle="modal" href="#modal-importar">
+            <i class="fa fa-file-excel"></i> Importar
+        </a> -->
+    </div>
+  </div>
+
+  <!-- Default box -->
+  <div class="box">
+    <div class="box-header with-border">
+        <h3 class="box-title">Mis servicios</h3>
+    </div>
+    <div class="box-body">
+        <!-- <div class="row">
+          <div class="col-md-4 pull-right mb-4">
+              <input type="text"
+                      class="form-control"
+                      placeholder="Buscar..."
+                      (keyup)="buscarFilas($event)"/>
+          </div>
+        </div> -->
+        <ngx-datatable #dtable
+                      class="material striped expandable" 
+                      [rows]="objViajes"
+                      columnMode="force"
+                      [headerHeight]="50"
+                      [footerHeight]="50"
+                      rowHeight="auto"
+                      [loadingIndicator]="loading"
+                      [messages]="msgTraduccion"
+                      [limit]="10">
+
+          <ngx-datatable-column name="Fecha del servicio" prop="fecha_servicio" [draggable]="false" [sortable]="true" headerClass="text-center-important" cellClass="text-center-important">
+            <ng-template let-value="value" ngx-datatable-cell-template>
+              {{ value | moment:'DD/MM/YYYY hh:mm a' }}
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column name="Conductor asignado" prop="nombre_conductor" [draggable]="false" [sortable]="true" headerClass="text-center-important" cellClass="text-center-important">
+            <ng-template let-value="value" ngx-datatable-cell-template>
+              {{ value | uppercase }}
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column name="Estatus del servicio" prop="estatus" [draggable]="false" [sortable]="true" headerClass="text-center-important" cellClass="text-center-important">
+            <ng-template let-value="value" ngx-datatable-cell-template>
+              <span [innerHtml]="value | estatusServicio"></span>
+            </ng-template>
+          </ngx-datatable-column>
+          <!-- <ngx-datatable-column name="Opciones" [width]="80" [draggable]="false" [sortable]="false" headerClass="text-center-important" cellClass="text-center-important">
+            <ng-template let-row="row" ngx-datatable-cell-template>
+              <button class="btn bg-red btn-sm" (click)="cancelaViaje(row.idreg)" title="Cancelar servicio" [disabled]="row.codigo_conductor">
+                  <i class="fa fa-times"></i>
+              </button>
+              <button class="btn bg-purple btn-sm ml-2" (click)="modalRutas(row.idreg)" title="Ruta del servicio">
+                <i class="fa fa-map"></i>
+              </button>
+            </ng-template>
+          </ngx-datatable-column> -->
+        </ngx-datatable>
+    </div>
+    <!-- /.box-body -->
+  </div>
+  <!-- /.box -->
+
+</section>
+
+
+<div class="modal fade" id="modal-servicio">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" *ngIf="nuevoRegistro">Nuevo Servicio</h4>
+        <h4 class="modal-title" *ngIf="!nuevoRegistro">Editar Servicio</h4>
+      </div>
+
+      <form class="form" #form="ngForm" (submit)="submitForm(form)">
+
+        <div class="modal-body" *ngIf="objServicio">
+
+          <h3>Datos generales del servicio</h3>
+
+          <input type="hidden" name="codigo_cliente" [(ngModel)]="objServicio.codigo_cliente" />
+
+          <div class="row">
+            <div class="col-md-6 form-group">
+              <label>Fecha del servicio</label>
+              <input type="date" class="form-control" name="fecha_servicio" [(ngModel)]="objServicio.fecha_servicio" required />
+            </div>
+            <div class="col-md-6 form-group">
+              <label>Nombre de la ruta</label>
+              <input type="text" class="form-control" placeholder="Nombre de la ruta" name="nombre_ruta" [(ngModel)]="objServicio.nombre_ruta" required />
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6 form-group">
+              <label>Hora de entrada (laboral)</label>
+              <input type="time" class="form-control" name="hora_entrada" [(ngModel)]="objServicio.hora_entrada" required />
+            </div>
+            <div class="col-md-6 form-group">
+              <label>Hora de salida (laboral)</label>
+              <input type="time" class="form-control" name="hora_salida" [(ngModel)]="objServicio.hora_salida" required />
+            </div>
+          </div>
+
+          <hr>
+
+          <h3>Puntos de recolección</h3>
+
+          <div class="row" *ngIf="objParada">
+            <div class="col-md-3 form-group">
+              <label>ID Nómina</label>
+              <input type="text" class="form-control" placeholder="ID Nómina del Empleado" name="idnomina" [(ngModel)]="objParada.idnomina" />
+            </div>
+            <div class="col-md-3 form-group">
+              <label>Tipo de parada</label>
+              <select class="form-control" name="tipo_parada" [(ngModel)]="objParada.tipo_parada">
+                <option value="">Seleccionar...</option>
+                <option value="ENTRADA">Solo entrada</option>
+                <option value="SALIDA">Solo salida</option>
+                <option value="ENTRADA Y SALIDA">Entrada y salida</option>
+              </select>
+            </div>
+            <div class="col-md-3 form-group">
+              <label>Hora de recolección <span *ngIf="objParada.tipo_parada === 'ENTRADA Y SALIDA'">entrada</span></label>
+              <input type="time" class="form-control" name="hora_recoleccion" [(ngModel)]="objParada.hora_recoleccion" [disabled]="objParada.tipo_parada === 'SALIDA'" />
+            </div>
+            <div class="col-md-3">
+              <button type="button" class="btn bg-navy btn-block" style="margin-top: 25px;" (click)="agregarParada()" [disabled]="objServicio.codigo_cliente === '' || objParada.idnomina === '' || objParada.tipo_parada === '' || (objParada.hora_recoleccion === '' && objParada.tipo_parada !== 'SALIDA')">
+                Agregar
+              </button>
+            </div>
+          </div>
+            
+          <input type="hidden" name="idreg" [(ngModel)]="objServicio.idreg">
+
+
+          <table class="table table-hover table-bordered">
+            <thead>
+              <tr>
+                <th class="text-center">#</th>
+                <th class="text-center">ID Nómina</th>
+                <th class="text-center">Empleado</th>
+                <th class="text-center">Tipo de parada</th>
+                <th class="text-center">Lugar</th>
+                <th class="text-center">H. Recolección entrada</th>
+                <th class="text-center">H. Recolección salida</th>
+                <th class="text-center">Opciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of arrParadas; let i = index;">
+                <td class="text-center">{{i+1}}</td>
+                <td class="text-center">{{item.idnomina | uppercase}}</td>
+                <td class="text-center">{{item.nombre_solicitante | titlecase}}</td>
+                <td class="text-center">{{item.tipo_parada | uppercase}}</td>
+                <td class="text-center">{{item.alias_lugar | titlecase}}</td>
+                <td class="text-center">{{item.hora_recoleccion_entrada | hour}}</td>
+                <td class="text-center">{{item.hora_recoleccion_salida | hour}}</td>
+                <td class="text-center">
+                  <button class="btn btn-sm bg-orange" (click)="quitarParada(i)"><i class="fa fa-trash"></i></button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+          <button type="submit" class="btn bg-navy"><i class="fa fa-save"></i> Guardar cambios</button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>

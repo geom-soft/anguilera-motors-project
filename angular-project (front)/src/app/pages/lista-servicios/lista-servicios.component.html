@@ -1,0 +1,369 @@
+<section class="content-header">
+  <h1>
+      Servicios
+      <small>listado.</small>
+  </h1>
+  <ol class="breadcrumb">
+      <li><a [routerLink]="[ '/inicio' ]"><i class="fas fa-home"></i> Inicio</a></li>
+      <li class="active">Servicios</li>
+  </ol>
+</section>
+
+<section class="content animated fadeIn" *ngIf="showError">
+  <div class="callout callout-warning">
+      <h4>Advertencia</h4>
+      <p>Hubo un problema al cargar el listado.</p>
+  </div>
+</section>
+
+<!-- Main content -->
+<section class="content" *ngIf="!showError">
+
+  <p>
+      En éste módulo se puede visualizar el listado de los servicios solicitados por los clientes a través de la plataforma.
+  </p>
+
+  <div class="row">
+      <div class="col-xs-4">
+          <button class="btn btn-app" [routerLink]="['/inicio']">
+              <i class="fa fa-home"></i> Inicio
+          </button>
+      </div>
+      <div class="col-xs-8">
+        <!-- <a class="btn btn-app pull-right" data-toggle="modal" href="#modal-terminados">
+          <i class="fa fa-list"></i> Serv. Terminados
+        </a> -->
+        <button type="button" class="btn btn-app pull-right" (click)="nuevoServicio()">
+          <i class="fa fa-plus"></i> Nuevo servicio
+        </button>
+        <a class="btn btn-app bg-green pull-right" data-toggle="modal" href="#modal-importar-servicio">
+            <i class="fa fa-file-excel"></i> Importar
+        </a>
+      </div>
+  </div>
+
+  <!-- Default box -->
+  <div class="box">
+      <div class="box-header with-border">
+          <h3 class="box-title">Listado de Servicios</h3>
+          <div class="box-tools">
+            <small class="pull-right text-muted">Se actualizará en {{segundos | clock}} minutos.</small>
+          </div>
+      </div>
+      <div class="box-body">
+          <div class="row mb-4">
+            <div class="col-md-4">
+              <select class="form-control" name="clienteSelected" [(ngModel)]="clienteSelected" (change)="cargarViajes()">
+                <option value="TODOS">Todos los clientes</option>
+                <option [value]="item.codigo_cliente" *ngFor="let item of objClientes;">{{item.nombre_empresa | titlecase}}</option>
+              </select>
+            </div>
+            <div class="col-md-2">
+              <select class="form-control" name="estatusSelected" [(ngModel)]="estatusSelected" (change)="cargarViajes()">
+                <option value="TODOS">Todos los estatus</option>
+                <option value="PROGRAMADO">Programado</option>
+                <option value="ASIGNADO">Asignado</option>
+                <option value="ACEPTADO">Aceptado</option>
+                <option value="TERMINADO">Terminado</option>
+                <option value="RECHAZADO">Rechazado</option>
+              </select>
+            </div>
+            <div class="col-md-4 col-md-offset-2">
+                <!-- <input type="text"
+                        class="form-control"
+                        placeholder="Buscar..."
+                        (keyup)="buscarFilas($event)"/> -->
+            </div>
+          </div>
+          <ngx-datatable #dtable
+                        class="material striped expandable" 
+                        [rows]="objViajes"
+                        columnMode="force"
+                        [headerHeight]="50"
+                        [footerHeight]="50"
+                        rowHeight="auto"
+                        [loadingIndicator]="loading"
+                        [messages]="msgTraduccion"
+                        [limit]="10">
+
+            <ngx-datatable-column name="Fecha del servicio" [draggable]="false" [sortable]="true" headerClass="text-center-important" cellClass="text-center-important">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                <!-- <a data-toggle="modal" href="#modal-logs" (click)="servicioLogs(row.idreg, true)">{{ row.fecha_servicio | moment:'DD/MM/YYYY' }}</a> -->
+                {{ row.fecha_servicio | moment:'DD/MM/YYYY' }}
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Empresa" [draggable]="false" [sortable]="true" headerClass="text-center-important">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                <!-- <a [routerLink]="['/cliente', row.codigo_cliente]">{{row.nombre_empresa | uppercase}}</a> -->
+                {{row.nombre_empresa | uppercase}}
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Conductor" prop="nombre_conductor" [draggable]="false" [sortable]="true" headerClass="text-center-important">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                {{ value | uppercase }}
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Estatus" prop="estatus" [draggable]="false" [sortable]="true" headerClass="text-center-important" cellClass="text-center-important">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                <span [innerHTML]="value | estatusServicio"></span>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Opciones" [width]="120" prop="idreg" [draggable]="false" [sortable]="false" headerClass="text-center-important" cellClass="text-center-important">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                  <button class="btn bg-navy btn-sm" (click)="modalConductor(value)" title="Asignar conductor">
+                      <i class="fa fa-user"></i>
+                  </button>
+                  <button class="btn bg-teal btn-sm ml-2" (click)="editarServicio(value)" title="Editar información">
+                    <i class="fa fa-edit"></i>
+                  </button>
+                  <button class="btn bg-orange btn-sm ml-2" (click)="eliminarServicio(value)" title="Eliminar registro">
+                      <i class="fa fa-trash-alt"></i>
+                  </button>
+              </ng-template>
+            </ngx-datatable-column>
+          </ngx-datatable>
+      </div>
+      <!-- /.box-body -->
+  </div>
+  <!-- /.box -->
+
+</section>
+
+
+<!-- <div class="modal fade" id="modal-terminados">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Servicios terminados</h4>
+      </div>
+      <div class="modal-body">
+        
+        <ngx-datatable
+        class="material striped expandable"
+        [rows]="objOtros"
+        columnMode="force"
+        [headerHeight]="50"
+        [footerHeight]="50"
+        rowHeight="auto"
+        [messages]="msgTraduccion"
+        [limit]="10">
+          <ngx-datatable-column name="Fecha de término" [draggable]="false" [sortable]="true" headerClass="text-center-important" cellClass="text-center-important">
+            <ng-template let-row="row" ngx-datatable-cell-template>
+              <a data-toggle="modal" href="#modal-logs" (click)="servicioLogs(row.idreg, false)">{{ row.fecha_termino | moment:'DD/MM/YYYY hh:mm a' }}</a>
+            </ng-template>
+          </ngx-datatable-column>
+            <ngx-datatable-column name="Empresa" prop="nombre_empresa" [draggable]="false" [sortable]="true" headerClass="text-center-important">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                {{ value | uppercase }}
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Conductor" prop="nombre_conductor" [draggable]="false" [sortable]="true" headerClass="text-center-important">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                {{ value | uppercase }}
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Estatus" prop="estatus" [draggable]="false" [sortable]="true" headerClass="text-center-important" cellClass="text-center-important">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                <span [innerHTML]="value | estatusServicio"></span>
+              </ng-template>
+            </ngx-datatable-column>
+        </ngx-datatable>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+<!-- <app-logs-modal [data]="objLogs" (actualiza)="actualizaLog()"></app-logs-modal> -->
+
+
+
+<div class="modal fade" id="modal-servicio">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" *ngIf="nuevoRegistro">Nuevo Servicio</h4>
+        <h4 class="modal-title" *ngIf="!nuevoRegistro">Editar Servicio</h4>
+      </div>
+
+      <form class="form" #form="ngForm" (submit)="submitForm(form)">
+
+        <div class="modal-body" *ngIf="objServicio">
+
+          <h3>Datos generales del servicio</h3>
+
+          <div class="row">
+            <div class="col-md-6 form-group">
+              <label>Cliente (empresa)</label>
+              <select class="form-control" name="codigo_cliente" [(ngModel)]="objServicio.codigo_cliente" (change)="cleanParadas()" required>
+                <option value="">Seleccionar...</option>
+                <option [value]="item.codigo_cliente" *ngFor="let item of objClientes;">{{item.nombre_empresa | titlecase}}</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6 form-group">
+              <label>Fecha del servicio</label>
+              <input type="date" class="form-control" name="fecha_servicio" [(ngModel)]="objServicio.fecha_servicio" required />
+            </div>
+            <div class="col-md-6 form-group">
+              <label>Nombre de la ruta</label>
+              <input type="text" class="form-control" placeholder="Nombre de la ruta" name="nombre_ruta" [(ngModel)]="objServicio.nombre_ruta" required />
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6 form-group">
+              <label>Hora de entrada (laboral)</label>
+              <input type="time" class="form-control" name="hora_entrada" [(ngModel)]="objServicio.hora_entrada" required />
+            </div>
+            <div class="col-md-6 form-group">
+              <label>Hora de salida (laboral)</label>
+              <input type="time" class="form-control" name="hora_salida" [(ngModel)]="objServicio.hora_salida" required />
+            </div>
+          </div>
+
+          <hr>
+
+          <h3>Puntos de recolección</h3>
+
+          <div class="row" *ngIf="objParada">
+            <div class="col-md-3 form-group">
+              <label>ID Nómina</label>
+              <input type="text" class="form-control" placeholder="ID Nómina del Empleado" name="idnomina" [(ngModel)]="objParada.idnomina" />
+            </div>
+            <div class="col-md-3 form-group">
+              <label>Tipo de parada</label>
+              <select class="form-control" name="tipo_parada" [(ngModel)]="objParada.tipo_parada">
+                <option value="">Seleccionar...</option>
+                <option value="ENTRADA">Solo entrada</option>
+                <option value="SALIDA">Solo salida</option>
+                <option value="ENTRADA Y SALIDA">Entrada y salida</option>
+              </select>
+            </div>
+            <div class="col-md-3 form-group">
+              <label>Hora de recolección <span *ngIf="objParada.tipo_parada === 'ENTRADA Y SALIDA'">entrada</span></label>
+              <input type="time" class="form-control" name="hora_recoleccion" [(ngModel)]="objParada.hora_recoleccion" [disabled]="objParada.tipo_parada === 'SALIDA'" />
+            </div>
+            <div class="col-md-3">
+              <button type="button" class="btn bg-navy btn-block" style="margin-top: 25px;" (click)="agregarParada()" [disabled]="objServicio.codigo_cliente === '' || objParada.idnomina === '' || objParada.tipo_parada === '' || (objParada.hora_recoleccion === '' && objParada.tipo_parada !== 'SALIDA')">
+                Agregar
+              </button>
+            </div>
+          </div>
+            
+          <input type="hidden" name="idreg" [(ngModel)]="objServicio.idreg">
+
+
+          <table class="table table-hover table-bordered">
+            <thead>
+              <tr>
+                <th class="text-center">#</th>
+                <th class="text-center">ID Nómina</th>
+                <th class="text-center">Empleado</th>
+                <th class="text-center">Tipo de parada</th>
+                <th class="text-center">Lugar</th>
+                <th class="text-center">H. Recolección entrada</th>
+                <th class="text-center">H. Recolección salida</th>
+                <th class="text-center">Opciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of arrParadas; let i = index;">
+                <td class="text-center">{{i+1}}</td>
+                <td class="text-center">{{item.idnomina | uppercase}}</td>
+                <td class="text-center">{{item.nombre_solicitante | titlecase}}</td>
+                <td class="text-center">{{item.tipo_parada | uppercase}}</td>
+                <td class="text-center">{{item.alias_lugar | titlecase}}</td>
+                <td class="text-center">{{item.hora_recoleccion_entrada | hour}}</td>
+                <td class="text-center">{{item.hora_recoleccion_salida | hour}}</td>
+                <td class="text-center">
+                  <button class="btn btn-sm bg-orange" (click)="quitarParada(i)"><i class="fa fa-trash"></i></button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+          <button type="submit" class="btn bg-navy"><i class="fa fa-save"></i> Guardar cambios</button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+<div class="modal fade" id="modal-importar-servicio">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Importar servicios desde Excel</h4>
+      </div>
+      <form class="form" #form="ngForm" (submit)="importar(form)">
+        <div class="modal-body">
+          <!-- <p>Ver <a href="#">plantilla de ejemplo</a> para el formato requerido.</p> -->
+          <div class="form-group mt-4">
+            <label>Empresa</label>
+            <select class="form-control" name="clienteImport" [(ngModel)]="clienteImport">
+              <option value="">Seleccionar...</option>
+              <option [value]="item.codigo_cliente" *ngFor="let item of objClientes;">{{item.nombre_empresa | titlecase}}</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Seleccionar archivo de Excel a importar (xlsx)</label>
+            <input type="file" #inputFile name="inputFile" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+            <!-- <p class="help-block">Formato permitido .xlsx</p> -->
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn bg-navy">Importar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+
+
+<div class="modal fade" id="modal-conductor">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Asignar Conductor</h4>
+      </div>
+      <div class="modal-body">
+        
+        <div class="form-group">
+          <label>Conductor</label>
+          <select class="form-control" name="idcSelected" [(ngModel)]="idcSelected">
+            <option value="">Seleccionar...</option>
+            <option [value]="item.codigo_conductor" *ngFor="let item of objConductores;">{{item.nombres + ' ' + item.apellidos | titlecase}}</option>
+          </select>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary" (click)="asignarConductor()">Asignar</button>
+      </div>
+    </div>
+  </div>
+</div>

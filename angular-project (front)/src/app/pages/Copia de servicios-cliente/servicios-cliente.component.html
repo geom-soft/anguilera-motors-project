@@ -1,0 +1,363 @@
+<section class="content-header">
+  <h1>
+    Servicios
+    <small>listado.</small>
+  </h1>
+  <ol class="breadcrumb">
+      <li><a [routerLink]="[ '/inicio' ]"><i class="fas fa-home"></i> Inicio</a></li>
+      <li><a [routerLink]="[ '/lista-servicios' ]">Servicios</a></li>
+      <li class="active">Cliente</li>
+  </ol>
+</section>
+
+<section class="content animated fadeIn" *ngIf="showError">
+  <div class="callout callout-warning">
+      <h4>Advertencia</h4>
+      <p>Hubo un problema al cargar el listado.</p>
+  </div>
+</section>
+
+<!-- Main content -->
+<section class="content" *ngIf="!showError">
+
+  <div class="row">
+      <div class="col-xs-4">
+          <button class="btn btn-app" [routerLink]="['/lista-servicios']">
+              <i class="fa fa-arrow-left"></i> Regresar
+          </button>
+      </div>
+      <div class="col-xs-8">
+          <button type="button" class="btn btn-app pull-right" (click)="nuevoViaje()">
+              <i class="fa fa-plus"></i> Nuevo servicio
+          </button>
+          <a class="btn btn-app pull-right" data-toggle="modal" href="#modal-terminados">
+            <i class="fa fa-list"></i> Serv. Terminados
+          </a>
+          <a class="btn btn-app bg-green pull-right" data-toggle="modal" href="#modal-importar">
+              <i class="fa fa-file-excel"></i> Importar
+          </a>
+      </div>
+  </div>
+
+  <!-- Default box -->
+  <div class="box">
+      <div class="box-header with-border">
+          <h3 class="box-title">Servicios de {{objCliente?.nombre_empresa | titlecase}}</h3>
+      </div>
+      <div class="box-body">
+          <div class="row">
+            <div class="col-md-4 pull-right mb-4">
+                <input type="text"
+                        class="form-control"
+                        placeholder="Buscar..."
+                        (keyup)="buscarFilas($event)"/>
+            </div>
+          </div>
+          <ngx-datatable #dtable
+                        class="material striped expandable" 
+                        [rows]="objViajes"
+                        columnMode="force"
+                        [headerHeight]="50"
+                        [footerHeight]="50"
+                        rowHeight="auto"
+                        [loadingIndicator]="loading"
+                        [messages]="msgTraduccion"
+                        [limit]="10">
+
+            <ngx-datatable-column name="Fecha de Solicitúd" prop="fecha_servicio" [draggable]="false" [sortable]="true" headerClass="text-center-important" cellClass="text-center-important">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                {{ value | moment:'DD/MM/YYYY hh:mm a' }}
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Empresa" prop="nombre_empresa" [draggable]="false" [sortable]="true" headerClass="text-center-important">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                {{ value | uppercase }}
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Solicitante" prop="nombre_solicitante" [draggable]="false" [sortable]="true" headerClass="text-center-important" >
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                {{ value | uppercase }}
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Conductor" prop="nombre_conductor" [draggable]="false" [sortable]="true" headerClass="text-center-important">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                {{ value | uppercase }}
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Estatus" prop="estatus" [draggable]="false" [sortable]="true" headerClass="text-center-important" cellClass="text-center-important">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                <span [innerHTML]="value | estatusServicio"></span>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Opciones" [width]="80" prop="idreg" [draggable]="false" [sortable]="false" headerClass="text-center-important" cellClass="text-center-important">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                <button class="btn bg-teal btn-sm" (click)="editarViaje(value)" title="Editar información">
+                    <i class="fa fa-edit"></i>
+                </button>
+              </ng-template>
+            </ngx-datatable-column>
+          </ngx-datatable>
+      </div>
+      <!-- /.box-body -->
+  </div>
+  <!-- /.box -->
+
+</section>
+
+
+
+<div class="modal fade" id="modal-servicio">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" *ngIf="nuevoRegistro">Nuevo Servicio</h4>
+        <h4 class="modal-title" *ngIf="!nuevoRegistro">Editar Servicio</h4>
+      </div>
+
+      <form class="form" #form="ngForm" (submit)="submitForm(form)">
+
+        <div class="modal-body" *ngIf="objViaje">
+            <div class="row">
+              <div class="col-md-6 form-group">
+                <label>Fecha y hora de servicio *</label>
+                <input type="datetime-local" class="form-control" name="fecha_servicio" [(ngModel)]="objViaje.fecha_servicio" required>
+              </div>
+              <div class="col-md-6 form-group">
+                <label>Asignar conductor *</label>
+                <l-select2 name="codigo_conductor" [(ngModel)]="objViaje.codigo_conductor" [data]="s2_conductor.data" [options]="s2_conductor.options" [disabled]="false" (valueChange)="valueChangeConductor($event)" required></l-select2>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6 form-group">
+                <label>Empresa cliente *</label>
+                <l-select2 name="codigo_cliente" [(ngModel)]="objViaje.codigo_cliente" [data]="s2_empresa.data" [options]="s2_empresa.options" [disabled]="false" (valueChange)="valueChangeEmpresa($event)" required></l-select2>
+              </div>
+              <div class="col-md-6 form-group">
+                <label>Notas</label>
+                <textarea class="form-control" placeholder="Notas opcionales para el conductor" name="notas" [(ngModel)]="objViaje.notas"></textarea>
+              </div>
+            </div>
+            <!-- <div class="row">
+              <div class="col-md-6 form-group">
+                <label>Distancia (kilómetros)</label>
+                <input type="text" class="form-control" placeholder="Distancia en kilómetros de origen a destino" name="distancia" [(ngModel)]="objViaje.distancia">
+              </div>
+            </div> -->
+
+            <hr>
+
+            <div class="row">
+              <div class="col-md-6 form-group">
+                <div class="radio-inline">
+                  <label>
+                    <input type="radio" name="paradasOpt" [(ngModel)]="paradasOpt" value="SIN">
+                    Sin paradas
+                  </label>
+                </div>
+                <div class="radio-inline">
+                  <label>
+                    <input type="radio" name="paradasOpt" [(ngModel)]="paradasOpt" value="CON">
+                    Con paradas
+                  </label>
+                </div>
+              </div>
+              <div class="col-md-6 form-group" *ngIf="paradasOpt === 'CON'">
+                <div class="radio-inline">
+                  <label>
+                    <input type="radio" name="viajeOpt" [(ngModel)]="viajeOpt" value="IDA">
+                    Mismo destino (viaje de ida)
+                  </label>
+                </div>
+                <div class="radio-inline">
+                  <label>
+                    <input type="radio" name="viajeOpt" [(ngModel)]="viajeOpt" value="VUELTA">
+                    Mismo origen (viaje de vuelta)
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <!-- SIN PARADAS -->
+
+            <hr *ngIf="paradasOpt === 'SIN'">
+
+            <div class="row" *ngIf="paradasOpt === 'SIN'">
+              <div class="col-md-6 form-group">
+                <label>Solicitante *</label>
+                <input type="text" class="form-control" placeholder="Nombre completo del pasajero" name="nombre_solicitante" [(ngModel)]="objOrigen.nombre_solicitante" required
+                [typeahead]="objPersonal" typeaheadOptionField="text" (typeaheadOnSelect)="valueChangePersonal($event)"
+                [typeaheadOptionsLimit]="20" [typeaheadSingleWords]="true" [typeaheadScrollable]="true" [typeaheadLatinize]="true">
+              </div>
+              <div class="col-md-3 form-group">
+                <label>Número de nómina</label>
+                <input type="text" class="form-control" placeholder="Nómina opcional" name="numero_nomina" [(ngModel)]="objOrigen.numero_nomina">
+              </div>
+              <div class="col-md-3 form-group">
+                  <label>Teléfono de contacto</label>
+                  <input type="text" class="form-control" placeholder="Teléfono opcional" name="telefono_solicitante" [(ngModel)]="objOrigen.telefono_solicitante">
+              </div>
+            </div>
+            <div class="row" *ngIf="paradasOpt === 'SIN'">
+              <div class="col-md-6 form-group">
+                <label>Punto origen</label>
+                <input type="text" class="form-control" placeholder="Lugar de origen" name="lugar_parada0" [(ngModel)]="objOrigen.lugar_parada">
+              </div>
+              <div class="col-md-6 form-group">
+                <label>Punto destino</label>
+                <input type="text" class="form-control" placeholder="Lugar de destino" name="lugar_parada1" [(ngModel)]="objDestino.lugar_parada">
+              </div>
+            </div>
+            <div class="row" *ngIf="paradasOpt === 'SIN'">
+              <div class="col-md-6 form-group">
+                <label>Domicilio origen</label>
+                <textarea class="form-control" placeholder="Domicilio de origen" name="domicilio_parada0" [(ngModel)]="objOrigen.domicilio_parada"></textarea>
+              </div>
+              <div class="col-md-6 form-group">
+                <label>Domicilio destino</label>
+                <textarea class="form-control" placeholder="Domicilio de destino" name="domicilio_parada1" [(ngModel)]="objDestino.domicilio_parada"></textarea>
+              </div>
+            </div>
+
+
+
+            <!-- CON PARADAS -->
+
+            <div class="row" *ngIf="paradasOpt === 'CON' && viajeOpt === 'VUELTA'">
+              <div class="col-md-6 form-group">
+                <label>Lugar origen</label>
+                <input type="text" class="form-control" placeholder="Lugar de origen" name="lugar_origen" [(ngModel)]="objOrigen.lugar_parada">
+              </div>
+              <div class="col-md-6 form-group">
+                <label>Domicilio origen</label>
+                <textarea class="form-control" placeholder="Domicilio de origen" name="domicilio_origen" [(ngModel)]="objOrigen.domicilio_parada"></textarea>
+              </div>
+            </div>
+
+            <hr *ngIf="paradasOpt === 'CON' && viajeOpt === 'VUELTA'">
+
+            <ng-container *ngFor="let rutaItem of objRutas; let i = index;">
+              <hr>
+              <p class="text-bold text-center"><button class="btn btn-xs btn-danger" (click)="quitarParada(i)"><i class="fa fa-times"></i></button> Pasajero {{i+1}}</p>
+              <div class="row" *ngIf="paradasOpt === 'CON'">
+                <div class="col-md-6 form-group">
+                  <label>Nombre *</label>
+                  <input type="text" class="form-control" placeholder="Nombre completo del pasajero" name="nombre_solicitante{{i}}" [(ngModel)]="rutaItem.nombre_solicitante" required
+                  [typeahead]="objPersonal" typeaheadOptionField="text" (typeaheadOnSelect)="valueChangePersonal($event)"
+                  [typeaheadOptionsLimit]="20" [typeaheadSingleWords]="true" [typeaheadScrollable]="true" [typeaheadLatinize]="true">
+                </div>
+                <div class="col-md-3 form-group">
+                  <label>Número de nómina</label>
+                  <input type="text" class="form-control" placeholder="Nómina opcional" name="numero_nomina{{i}}" [(ngModel)]="rutaItem.numero_nomina">
+                </div>
+                <div class="col-md-3 form-group">
+                    <label>Teléfono de contacto</label>
+                    <input type="text" class="form-control" placeholder="Teléfono opcional" name="telefono_solicitante{{i}}" [(ngModel)]="rutaItem.telefono_solicitante">
+                </div>
+              </div>
+              <div class="row" *ngIf="paradasOpt === 'CON'">
+                <div class="col-md-6 form-group">
+                  <label>Lugar parada</label>
+                  <input type="text" class="form-control" placeholder="Lugar de parada" name="lugar_parada{{i}}" [(ngModel)]="rutaItem.lugar_parada">
+                </div>
+                <div class="col-md-6 form-group">
+                  <label>Domicilio parada</label>
+                  <textarea class="form-control" placeholder="Domicilio de parada" name="domicilio_parada{{i}}" [(ngModel)]="rutaItem.domicilio_parada"></textarea>
+                </div>
+              </div>
+            </ng-container>
+
+            <div class="row" *ngIf="paradasOpt === 'CON'">
+              <div class="col-md-6">
+                <button class="btn bg-navy" (click)="agregarParada()"><i class="fa fa-plus"></i> Agregar parada</button>
+              </div>
+            </div>
+
+            <hr *ngIf="paradasOpt === 'CON' && viajeOpt === 'IDA'">
+
+            <div class="row" *ngIf="paradasOpt === 'CON' && viajeOpt === 'IDA'">
+              <div class="col-md-6 form-group">
+                <label>Lugar destino</label>
+                <input type="text" class="form-control" placeholder="Lugar de destino" name="lugar_destino" [(ngModel)]="objDestino.lugar_parada">
+              </div>
+              <div class="col-md-6 form-group">
+                <label>Domicilio destino</label>
+                <textarea class="form-control" placeholder="Domicilio de destino" name="domicilio_destino" [(ngModel)]="objDestino.domicilio_parada"></textarea>
+              </div>
+            </div>
+
+
+
+            
+
+            <input type="hidden" name="fecha_inicio" [ngModel]="objViaje.fecha_inicio"> 
+            <input type="hidden" name="fecha_termino" [ngModel]="objViaje.fecha_termino"> 
+            <input type="hidden" name="estatus" [ngModel]="objViaje.estatus" required> 
+
+          
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger pull-left" (click)="cancelaViaje(objViaje.idreg)" *ngIf="!nuevoRegistro">Cancelar servicio</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+          <button type="submit" class="btn bg-navy"><i class="fa fa-save"></i> Guardar cambios</button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="modal-terminados">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Servicios terminados</h4>
+      </div>
+      <div class="modal-body">
+        
+        <ngx-datatable
+        class="material striped expandable"
+        [rows]="objOtros"
+        columnMode="force"
+        [headerHeight]="50"
+        [footerHeight]="50"
+        rowHeight="auto"
+        [messages]="msgTraduccion"
+        [limit]="10">
+            <ngx-datatable-column name="Fecha de Solicitúd" prop="fecha_servicio" [draggable]="false" [sortable]="true" headerClass="text-center-important" cellClass="text-center-important">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                {{ value | moment:'DD/MM/YYYY hh:mm a' }}
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Empresa" prop="nombre_empresa" [draggable]="false" [sortable]="true" headerClass="text-center-important">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                {{ value | uppercase }}
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Solicitante" prop="nombre_solicitante" [draggable]="false" [sortable]="true" headerClass="text-center-important" >
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                {{ value | uppercase }}
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Conductor" prop="nombre_conductor" [draggable]="false" [sortable]="true" headerClass="text-center-important">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                {{ value | uppercase }}
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Estatus" prop="estatus" [draggable]="false" [sortable]="true" headerClass="text-center-important" cellClass="text-center-important">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                <span [innerHTML]="value | estatusServicio"></span>
+              </ng-template>
+            </ngx-datatable-column>
+        </ngx-datatable>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>

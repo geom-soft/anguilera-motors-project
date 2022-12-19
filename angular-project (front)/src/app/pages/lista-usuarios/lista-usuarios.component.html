@@ -1,0 +1,168 @@
+<section class="content-header">
+  <h1>
+      Usuarios
+      <small>administradores del sistema.</small>
+  </h1>
+  <ol class="breadcrumb">
+      <li><a [routerLink]="[ '/inicio' ]"><i class="fas fa-home"></i> Inicio</a></li>
+      <li class="active">Usuarios</li>
+  </ol>
+</section>
+
+<section class="content animated fadeIn" *ngIf="showError">
+  <div class="callout callout-warning">
+      <h4>Advertencia</h4>
+      <p>Hubo un problema al cargar el listado.</p>
+  </div>
+</section>
+
+<!-- Main content -->
+<section class="content" *ngIf="!showError">
+
+  <p>
+      En éste módulo se puede visualizar el listado de los usuarios registrados para gestional el sistema.
+  </p>
+
+  <div class="row">
+      <div class="col-xs-4">
+          <button class="btn btn-app" [routerLink]="['/inicio']">
+              <i class="fa fa-home"></i> Inicio
+          </button>
+      </div>
+      <div class="col-xs-8">
+          <button class="btn btn-app pull-right" (click)="nuevoUsuario()">
+              <i class="fa fa-plus"></i> Nuevo usuario
+          </button>
+      </div>
+  </div>
+
+  <!-- Default box -->
+  <div class="box">
+      <div class="box-header with-border">
+          <h3 class="box-title">Listado de Usuarios</h3>
+      </div>
+      <div class="box-body">
+
+        <div class="row">
+            <div class="col-md-4 pull-right mb-4">
+                <input type="text"
+                        class="form-control"
+                        placeholder="Buscar..."
+                        (keyup)="buscarFilas($event)"/>
+            </div>
+        </div>
+        <ngx-datatable #dtable
+                        class="material striped expandable" 
+                        [rows]="objUsuarios"
+                        columnMode="force"
+                        [headerHeight]="50"
+                        [footerHeight]="50"
+                        rowHeight="auto"
+                        [loadingIndicator]="loading"
+                        [messages]="msgTraduccion"
+                        [limit]="10">
+
+            <ngx-datatable-column name="Nombre" [draggable]="false" [sortable]="true" headerClass="text-center-important">
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                    {{ row.nombres + ' ' + row.apellidos | titlecase }}
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Correo" prop="correo_electronico" [draggable]="false" [sortable]="true" headerClass="text-center-important" cellClass="text-center-important">
+                <ng-template let-value="value" ngx-datatable-cell-template>
+                    <a href="mailto:{{value}}" title="Enviar correo">{{value}}</a>
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Estatus" prop="estatus" [draggable]="false" [sortable]="false" headerClass="text-center-important" cellClass="text-center-important">
+                <ng-template let-value="value" ngx-datatable-cell-template>
+                    <span [innerHTML]="value | estatusActivo"></span>
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Opciones" [width]="80" prop="codigo_usuario" [draggable]="false" [sortable]="false" headerClass="text-center-important" cellClass="text-center-important">
+                <ng-template let-value="value" ngx-datatable-cell-template>
+                    <button class="btn bg-teal btn-sm" (click)="editarUsuario(value)" title="Editar información">
+                        <i class="fa fa-edit"></i>
+                    </button>
+                    <button class="btn bg-orange btn-sm ml-2" (click)="eliminarUsuario(value)" title="Eliminar registro" [disabled]="objSession.codigo === value">
+                        <i class="fa fa-trash-alt"></i>
+                    </button>
+                </ng-template>
+            </ngx-datatable-column>
+        </ngx-datatable>
+        
+      </div>
+      <!-- /.box-body -->
+  </div>
+  <!-- /.box -->
+
+</section>
+
+
+
+<div class="modal fade" id="modal-usuario">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" *ngIf="nuevoRegistro">Nuevo Usuario</h4>
+        <h4 class="modal-title" *ngIf="!nuevoRegistro">Editar Usuario</h4>
+      </div>
+
+      <form class="form" #form="ngForm" (submit)="submitForm(form)">
+
+        <div class="modal-body" *ngIf="objUsuario">
+            <div class="row">
+              <div class="col-md-6 form-group">
+                  <label>Nombre(s) *</label>
+                  <input type="text" class="form-control" placeholder="Nombre(s) del usuario" name="nombres" [(ngModel)]="objUsuario.nombres" required>
+              </div>
+              <div class="col-md-6 form-group">
+                  <label>Apellido(s) *</label>
+                  <input type="text" class="form-control" placeholder="Apellido(s) del usuario" name="apellidos" [(ngModel)]="objUsuario.apellidos" required>
+              </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 form-group">
+                    <label>Estatus *</label>
+                    <select class="form-control" name="estatus" [(ngModel)]="objUsuario.estatus" required>
+                        <option value="1">Activo</option>
+                        <option value="2">Inactivo</option>
+                    </select>
+                </div>
+                <div class="col-md-6 form-group">
+                  <label>Correo electrónico *</label>
+                  <div class="input-group">
+                      <span class="input-group-addon"><i class="fa fa-at"></i></span>
+                      <input type="email" class="form-control" placeholder="Correo electrónico de contacto" name="correo_electronico" [(ngModel)]="objUsuario.correo_electronico" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" required>
+                  </div>
+                </div>
+            </div>
+            
+            <div class="row" [hidden]="!nuevoRegistro">
+                <div class="col-md-6">
+                    <label>NIP *</label>
+                    <input type="password" class="form-control" placeholder="NIP de acceso" #pass1 name="contrasena" [(ngModel)]="objUsuario.contrasena" required [minlength]="nuevoRegistro ? 3 : ''" [maxlength]=" nuevoRegistro ? 6 : ''" [pattern]=" nuevoRegistro ? '[0-9]*' : ''"
+                        inputmode="numeric">
+                    <span class="help-block">El NIP de acceso debe tener entre 3 y 6 dígitos numéricos.</span>
+                </div>
+                <div class="col-md-6">
+                    <label>Confirmar NIP *</label>
+                    <input type="password" class="form-control" id="pass2" placeholder="Confirmar NIP" #pass2 inputmode="numeric">
+                    <span class="help-block" *ngIf="pass1.value !== pass2.value">Ambos NIPs deben coincidir.</span>
+                </div>
+            </div>
+
+            <input type="hidden" name="codigo_usuario" [ngModel]="objUsuario.codigo_usuario">
+
+          
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-warning pull-left" *ngIf="!nuevoRegistro" (click)="resetPass()">Restaurar NIP</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn bg-navy"><i class="fa fa-save"></i> Guardar cambios</button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>

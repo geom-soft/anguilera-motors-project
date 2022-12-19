@@ -1,0 +1,61 @@
+<section class="content-header">
+  <h1>
+    Reporte
+    <small>conductores y rutas</small>
+  </h1>
+</section>
+
+<section class="content">
+
+  <div class="row">
+    <div class="col-md-6 col-md-offset-6">
+      <button class="btn btn-app pull-right" (click)="exportar()">
+        <i class="fa fa-file-excel"></i> Exportar
+      </button>
+    </div>
+  </div>
+
+  <div class="box">
+    <div class="box-body box-reporte">
+
+      <div class="row">
+        <div class="col-md-3 col-md-offset-9 text-right">
+          <label>Seleccionar fechas</label>
+          <app-date-picker [selected]="'ultimos7dias'" (change)="getDates($event)" position="right"></app-date-picker>
+        </div>
+      </div>
+
+      <div class="row mt-4">
+        <div class="col-md-12">
+          <table id="tabla-reporte" class="table table-bordered table-hover">
+            <thead>
+              <tr>
+                <th class="text-center">#</th>
+                <th class="text-center">Fecha</th>
+                <th class="text-center">Conductor</th>
+                <th class="text-center">Entrada / Salida</th>
+                <th class="text-center">Hora</th>
+                <th class="text-center">Ruta</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of objRegistros; let i = index;">
+                <td class="text-center">{{i+1}}</td>
+                <td class="text-center">{{item.fecha_servicio | moment}}</td>
+                <td class="text-center">{{item.conductor | titlecase}}</td>
+                <td class="text-center">{{item.leyenda | uppercase}}</td>
+                <td class="text-center">{{item.hora}}</td>
+                <td class="text-center">{{item.ruta | titlecase}}</td>
+              </tr>
+              <tr *ngIf="objRegistros.length === 0">
+                <td colspan="6" class="text-center">Sin registros</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</section>

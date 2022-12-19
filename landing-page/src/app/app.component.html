@@ -1,0 +1,579 @@
+<div class="site-mobile-menu site-navbar-target">
+  <div class="site-mobile-menu-header">
+    <div class="site-mobile-menu-close">
+      <span class="icofont-close js-menu-toggle"></span>
+    </div>
+  </div>
+  <div class="site-mobile-menu-body"></div>
+</div>
+<nav class="site-nav">
+  <div class="container">
+    <div class="site-navigation">
+      <ul class="js-clone-nav d-none d-lg-inline-block text-left site-menu">
+        <li class="active"><a href="javascript:;">Inicio</a></li>
+        <li><a href="#valores">Valores</a></li>
+        <li><a href="#servicios">Servicios</a></li>
+        <li><a href="#contacto">Contacto</a></li>
+      </ul>
+      <ul class="js-clone-nav d-none d-lg-inline-block text-left site-menu float-right menu-absolute">
+        <li class="cta-button"><a href="tel:4499010386"><i class="fas fa-phone"></i> &nbsp; ¡Llamanos!</a></li>
+      </ul>
+      <a href="#" class="burger light ml-auto float-right site-menu-toggle js-menu-toggle d-inline-block d-lg-none"
+        data-toggle="collapse" data-target="#main-navbar">
+        <span></span>
+      </a>
+    </div>
+  </div>
+</nav>
+<div class="hero">
+  <div class="container">
+    <div class="row align-items-center justify-content-between">
+      <div class="col-md-6 intro">
+        <img src="assets/images/logotipo_mono.png" alt="Image" class="img-fluid img-main" />
+      </div>
+      <div class="col-md-6" data-aos="fade-up" data-aos-delay="300" style="z-index: 10;">
+        <video #target_video class="video-js vjs-big-play-centered vjs-4-3">
+      </video>
+      <!-- data-setup='{ "techOrder": ["youtube"], "sources": [{ "type": "video/youtube", "src": "https://www.youtube.com/watch?v=XHM5b_-s99U"}] }' -->
+      </div>
+    </div>
+  </div>
+  <div class="slant" style="background-image: url('assets/images/slant.svg');"></div>
+</div>
+<div class="py-3">
+  <div class="container brands-container">
+    <!-- <div class="row">
+      <div class="col" data-aos="fade-up" data-aos-delay="0">
+        <img src="assets/images/barlett.png" alt="Image" class="img-fluid" style="max-width: 80px;">
+      </div>
+      <div class="col" data-aos="fade-up" data-aos-delay="100">
+        <img src="assets/images/formel-d.png" alt="Image" class="img-fluid" style="max-width: 120px;">
+      </div>
+      <div class="col" data-aos="fade-up" data-aos-delay="200">
+        <img src="assets/images/nissan.png" alt="Image" class="img-fluid" style="max-width: 120px;">
+      </div>
+      <div class="col" data-aos="fade-up" data-aos-delay="300">
+        <img src="assets/images/trigo.png" alt="Image" class="img-fluid" style="max-width: 150px;">
+      </div>
+      <div class="col" data-aos="fade-up" data-aos-delay="300">
+        <img src="assets/images/bia_group.png" alt="Image" class="img-fluid" style="max-width: 140px;">
+      </div>
+    </div> -->
+    <div class="row">
+      <div class="col" data-aos="fade-up" data-aos-delay="0">
+        <img src="assets/clientes/barlett.jpeg" alt="Image" class="img-fluid" style="max-width: 150px;">
+      </div>
+      <div class="col" data-aos="fade-up" data-aos-delay="100">
+        <img src="assets/clientes/formel-d.jpeg" alt="Image" class="img-fluid" style="max-width: 150px;">
+      </div>
+      <div class="col" data-aos="fade-up" data-aos-delay="200">
+        <img src="assets/clientes/nissan.jpeg" alt="Image" class="img-fluid" style="max-width: 150px;">
+      </div>
+      <div class="col" data-aos="fade-up" data-aos-delay="300">
+        <img src="assets/clientes/trigo.jpeg" alt="Image" class="img-fluid" style="max-width: 150px;">
+      </div>
+      <div class="col" data-aos="fade-up" data-aos-delay="300">
+        <img src="assets/clientes/bia.jpeg" alt="Image" class="img-fluid" style="max-width: 150px;">
+      </div>
+    </div>
+  </div>
+</div>
+<div class="features-section" id="valores">
+  <div class="container">
+    <div class="row justify-content-center text-center">
+      <div class="section-title col-lg-7" data-aos="fade-up" data-aos-delay="0">
+        <strong class="subtitle d-block">Nos distinguen</strong>
+        <h2 class="heading font-weight-bold">Nuestros Valores</h2>
+      </div>
+    </div>
+    <div class="row gutter-v1">
+      <div class="text-center text-md-left col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="0">
+        <div class="feature cursor-pointer" (click)="showModal(1)">
+          <div class="img-wrap">
+            <i class="far fa-clock fa-3x"></i>
+          </div>
+          <h3>Puntualidad</h3>
+          <p>Te llevamos siempre a tiempo a tu destino.</p>
+        </div>
+      </div>
+      <div class="text-center text-md-left col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="100">
+        <div class="feature cursor-pointer" (click)="showModal(2)">
+          <div class="img-wrap">
+            <i class="far fa-handshake fa-3x"></i>
+          </div>
+          <h3>Compromiso</h3>
+          <p>Puedes contar con nosotros siempre que lo necesites.</p>
+        </div>
+      </div>
+      <div class="text-center text-md-left col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="200">
+        <div class="feature cursor-pointer" (click)="showModal(3)">
+          <div class="img-wrap">
+            <i class="fas fa-user-shield fa-3x"></i>
+          </div>
+          <h3>Seguridad</h3>
+          <p>Tu seguridad en el camino es nuestra prioridad.</p>
+        </div>
+      </div>
+      <div class="text-center text-md-left col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="0">
+        <div class="feature cursor-pointer" (click)="showModal(4)">
+          <div class="img-wrap">
+            <i class="fas fa-hand-sparkles fa-3x"></i>
+          </div>
+          <h3>Honestidad</h3>
+          <p>Tu confianza es lo más importante para nosotros.</p>
+        </div>
+      </div>
+      <div class="text-center text-md-left col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="100">
+        <div class="feature cursor-pointer" (click)="showModal(5)">
+          <div class="img-wrap">
+            <i class="fas fa-car-side fa-3x"></i>
+          </div>
+          <h3>Servicio</h3>
+          <p>Buscamos siempre ofrecerte lo mejor.</p>
+        </div>
+      </div>
+      <div class="text-center text-md-left col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="200">
+        <div class="feature cursor-pointer" (click)="showModal(6)">
+          <div class="img-wrap">
+            <i class="fas fa-hand-holding-usd fa-3x"></i>
+          </div>
+          <h3>Precio</h3>
+          <p>Somos tu mejor opción evaluando calidad y precio.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="post-entries" id="servicios">
+  <div class="container">
+    <div class="section-title text-center mb-5" data-aos="fade-up" data-aos-delay="0">
+      <strong class="subtitle d-block">Conóce</strong>
+      <h2 class="heading font-weight-bold mb-3">Nuestros Servicios</h2>
+    </div>
+    <div class="row align-items-stretch">
+      <div class="col-12 col-sm-6 col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="100">
+        <div class="media-entry h-100 cursor-pointer">
+          <a data-toggle="modal" data-target="#servicio-1" style="background-image: url('assets/images/hiace.jpg')"></a>
+          <div class="bg-white m-body">
+            <h3><a data-toggle="modal" data-target="#servicio-1">Transporte de personal</a></h3>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="200">
+        <div class="media-entry h-100 cursor-pointer">
+          <a data-toggle="modal" data-target="#servicio-2" style="background-image: url('assets/images/sentra.jpg')"></a>
+          <div class="bg-white m-body">
+            <h3><a data-toggle="modal" data-target="#servicio-2">Renta de vehículos</a></h3>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="300">
+        <div class="media-entry h-100 cursor-pointer">
+          <a data-toggle="modal" data-target="#servicio-3" style="background-image: url('assets/images/odyssey.jpg')"></a>
+          <div class="bg-white m-body">
+            <h3><a data-toggle="modal" data-target="#servicio-3">Viajes especiales</a></h3>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="features-lg">
+  <div class="container">
+    <div class="row feature align-items-center justify-content-between">
+      <div class="col-lg-7 mb-4 mb-lg-0" data-aos="fade-up" data-aos-delay="0">
+        <img src="https://media.giphy.com/media/vU1NNTWTPx9xc8yw2O/giphy.gif" alt="Image" class="img-fluid">
+      </div>
+      <div class="col-lg-4 section-title" data-aos="fade-up" data-aos-delay="100">
+        <strong class="subtitle d-block">Servicio en todo</strong>
+        <h2 class="font-weight-bold mb-4">El País</h2>
+        <p class="mb-4">
+          Vamos a donde necesites; contamos con servicio en cualquier estado de la republica,
+          asegurando nuestra disponibilidad a todos sus requerimientos.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="features-lg">
+  <div class="container">
+    <div class="row feature align-items-center justify-content-between">
+      <div class="col-lg-7 order-lg-2 mb-4 mb-lg-0" data-aos="fade-up" data-aos-delay="0">
+        <img src="https://media.giphy.com/media/FhAdq4m0usY8wqbJIK/giphy.gif" alt="Image" class="img-fluid">
+      </div>
+      <div class="col-lg-4 section-title" data-aos="fade-up" data-aos-delay="100">
+        <strong class="subtitle d-block">Estadísticas</strong>
+        <p class="mb-4">
+          Al mes recorremos 62,590 Km en rutas de Formel D. Lo que equivale a
+          ir de Tijuana a Cancún casi 14 veces.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="features-lg">
+  <div class="container">
+    <div class="row feature align-items-center justify-content-between">
+      <div class="col-lg-7 mb-4 mb-lg-0" data-aos="fade-up" data-aos-delay="0">
+        <img src="https://media.giphy.com/media/3ohhwgrL4KKPIZoTQY/giphy.gif" alt="Image" class="img-fluid">
+      </div>
+      <div class="col-lg-4 section-title" data-aos="fade-up" data-aos-delay="100">
+        <strong class="subtitle d-block">Estadísticas</strong>
+        <p class="mb-4">
+          Al mes recorremos 132,605 Km en rutas de Nissan A2. Lo equivalente a 
+          darle la vuelta al mundo 3.3 veces.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="site-footer" id="contacto">
+  <div class="container">
+    <div class="row justify-content-between">
+      <div class="col-lg-4">
+        <div class="widget">
+          <h3>Domicilio</h3>
+          <p>
+            Monte Everest #108 int. 4. <br>Bosques del Prado Norte. <br>C.P. 20127. Aguascalientes, Ags.
+          </p>
+          <p>
+            No dudes en llamarnos para lo que necesites. Estamos a tus órdenes.
+          </p>
+        </div>
+        <div class="widget">
+          <h3>Contacto</h3>
+          <ul class="social list-unstyled">
+            <li><a href="tel:4499010386"><i class="fas fa-phone"></i></a></li>
+            <li><a href="tel:4499010194"><i class="fas fa-mobile-alt"></i></a></li>
+            <li><a href="https://wa.me/524495362162?text=Hola%20necesito%20información%20sobre%20sus%20servicios" target="_blank"><i class="fab fa-whatsapp"></i></a></li>
+            <li><a href="mailto:direccion@aguileramotors.com"><i class="fas fa-envelope"></i></a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-lg-6 text-center">
+        <img src="assets/images/logotipo.png" class="img-footer my-auto" />
+      </div>
+    </div>
+    <div class="row justify-content-center text-center copyright">
+      <div class="col-md-8">
+        <p>
+          Todos los derechos reservados | Aguilera Motors {{year}}.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="overlayer"></div>
+<div class="loader">
+  <div class="spinner-border" role="status">
+    <span class="sr-only">Loading...</span>
+  </div>
+</div>
+
+<app-fab></app-fab>
+
+
+
+
+<!-- Modals de Valores -->
+<div class="modal fade" id="modal-1">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Puntualidad</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+      </div>
+      <div class="modal-body">
+        <p>Levamos una revisión constante de nuestras rutas en cuestión de tiempos de traslado, asegurando el puntal arribo de las unidades a su destino final.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modal-2">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Compromiso</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+      </div>
+      <div class="modal-body">
+        <p>Realizamos encuestas a los usuarios para obtener sus puntos de vista sobre el servicio y así tomar en cuenta sus comentarios y observaciones para mejorar y que su traslado sea siempre lo más placentero y seguro posible; además de que a todos los usuarios se les facilita un numero de contacto al cual podrán reportar de manera inmediata cualquier situación que se pudiera originar durante su traslado.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modal-3">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Seguridad</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+      </div>
+      <div class="modal-body">
+        <p>Nuestros choferes están altamente capacitados para que el traslado sea seguro, además de que todas nuestras unidades cuentan con extintor de incendios, botiquín de primeros auxilios, seguro de alta cobertura y monitoreo satelital las 24 horas del día y los 365 días del año.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modal-4">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Honestidad</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+      </div>
+      <div class="modal-body">
+        <p>Tu confianza es lo mas importante para nosotros, por eso tenemos una excelente comunicación con todos nuestros clientes el día y la hora a la que sea necesario.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modal-5">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Servicio</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+      </div>
+      <div class="modal-body">
+        <p>Buscamos siempre ofrecerte lo mejor, es por eso que desarrollamos una aplicación, para que tanto clientes y usuarios puedan monitorear el estado de sus viajes en tiempo real.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modal-6">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Precio</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+      </div>
+      <div class="modal-body">
+        <p>Contamos con el servicio mas personalizado del mercado, adaptándonos a todas sus necesidades para asegurar que tengan la mejor relación calidad-precio posible.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<!-- Modals de Servicios -->
+
+<div class="modal fade" id="servicio-1">
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Transporte de Personal</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+      </div>
+      <div class="modal-body">
+        <div class="container">
+          <div class="row align-items-stretch">
+            <div class="col-12 col-sm-6 col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="100">
+              <div class="media-entry h-100">
+                <a href="javascript:;" style="background-image: url('assets/images/sentra.jpg')"></a>
+                <div class="bg-white m-body">
+                  <span class="date">Auto</span>
+                  <h3><a href="javascript:;">Vehículo hasta 4 pasajeros</a></h3>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-sm-6 col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="200">
+              <div class="media-entry h-100">
+                <a href="javascript:;" style="background-image: url('assets/images/odyssey.jpg')"></a>
+                <div class="bg-white m-body">
+                  <span class="date">Minivan</span>
+                  <h3><a href="javascript:;">Vehículo hasta 7 pasajeros</a></h3>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-sm-6 col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="300">
+              <div class="media-entry h-100">
+                <a href="javascript:;" style="background-image: url('assets/images/hiace.jpg')"></a>
+                <div class="bg-white m-body">
+                  <span class="date">Van</span>
+                  <h3><a href="javascript:;">Vehículo hasta 14 pasajeros</a></h3>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="servicio-2">
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Renta de Vehículos</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+      </div>
+      <div class="modal-body">
+        <div class="container">
+          <div class="row align-items-stretch">
+            <div class="col-12 col-sm-6 col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="100">
+              <div class="media-entry h-100">
+                <a href="javascript:;" style="background-image: url('assets/images/spark.jpg')"></a>
+                <div class="bg-white m-body">
+                  <span class="date">Gama Baja</span>
+                  <h3><a href="javascript:;">Vehículo para 4 pasajeros</a></h3>
+                  <ul>
+                    <li>Nissan Versa</li>
+                    <li>Dodge Attitude</li>
+                    <li>Chevrolet Spark</li>
+                    <li>Chevrolet Beat</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-sm-6 col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="200">
+              <div class="media-entry h-100">
+                <a href="javascript:;" style="background-image: url('assets/images/sentra.jpg')"></a>
+                <div class="bg-white m-body">
+                  <span class="date">Gama Media</span>
+                  <h3><a href="javascript:;">Vehículo para 4 pasajeros</a></h3>
+                  <ul>
+                    <li>Volkswagen Golf</li>
+                    <li>Nissan Sentra</li>
+                    <li>Volkswagen Jetta</li>
+                    <li style="visibility: hidden;"></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-sm-6 col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="300">
+              <div class="media-entry h-100">
+                <a href="javascript:;" style="background-image: url('assets/images/x1.jpg')"></a>
+                <div class="bg-white m-body">
+                  <span class="date">Gama Alta</span>
+                  <h3><a href="javascript:;">Vehículo para 4 pasajeros</a></h3>
+                  <ul>
+                    <li>Renault Koleos</li>
+                    <li>BMW X1</li>
+                    <li>Volkswagen Tiguan</li>
+                    <li>Ford Lobo</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-sm-6 col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="400">
+              <div class="media-entry h-100">
+                <a href="javascript:;" style="background-image: url('assets/images/odyssey.jpg')"></a>
+                <div class="bg-white m-body">
+                  <h3><a href="javascript:;">Minivan para hasta 7 pasajeros</a></h3>
+                  <ul>
+                    <li>Honda Odyssey</li>
+                    <li>Toyota Sienna</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-sm-6 col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="400">
+              <div class="media-entry h-100">
+                <a href="javascript:;" style="background-image: url('assets/images/hiace.jpg')"></a>
+                <div class="bg-white m-body">
+                  <h3><a href="javascript:;">Van para hasta 14 pasajeros</a></h3>
+                  <ul>
+                    <li>Nissan Urban</li>
+                    <li>Toyota Hiace</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="servicio-3">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Viajes Especiales</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+      </div>
+      <div class="modal-body">
+        <p>
+          Desde viajes familiares hasta traslados de lujo, nos aseguramos de que tu experiencia sea la mas confortable; con choferes capacitados y listos para atenderte.
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="modal-video" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <!-- <h5 class="modal-title">Modal title</h5> -->
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body text-center" style="min-height: 400px;">
+        <iframe width="100%" height="400" src="https://www.youtube.com/embed/XHM5b_-s99U" title="Aguilera Motors Logística Integral - Video corporativo 2021" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
+      <!-- <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+      </div> -->
+    </div>
+  </div>
+</div>
